@@ -1,7 +1,9 @@
 #include "pacman.h"
 
 pacman::pacman(Texture& t, Sprite s, IntRect rect, int posx, int posy)
+   : frameDelay(0.059f)
 {
+
     s.setScale(3.8, 3.8);
     directionToCheck = "none";
     s.setTexture(t);
@@ -30,25 +32,24 @@ void pacman::animate() {
 }
 
 void pacman::updateAnimation() {
-    if (direction == "right") {
-        currentFrameY = 0; 
+    if (animationClock.getElapsedTime().asSeconds() > frameDelay) {
+        if (direction == "right") {
+            currentFrameY = 0;
+        }
+        else if (direction == "up") {
+            currentFrameY = 1;
+        }
+        else if (direction == "left") {
+            currentFrameY = 2;
+        }
+        else if (direction == "down") {
+            currentFrameY = 3;
+        }
         currentFrameX = (currentFrameX + 1) % totalFramesX;
+        animate();
+        animationClock.restart();
     }
-    else if (direction == "up") {
-        currentFrameY = 1; 
-        currentFrameX = (currentFrameX + 1) % totalFramesX;
-    }
-    else if (direction == "left") {
-        currentFrameY = 2; 
-        currentFrameX = (currentFrameX + 1) % totalFramesX;
-    }
-    else if (direction == "down") {
-        currentFrameY = 3; 
-        currentFrameX = (currentFrameX + 1) % totalFramesX;
-    }
-    animate();
 }
-
 bool pacman::checkCollision(std::vector <Tile> tilemap)
 {
     for (int i = 0; i < tilemap.size(); i++)
@@ -121,21 +122,20 @@ void pacman::setFace(std::string face)
 {
     if (face == "right")
     {
-        sprite.setTextureRect(IntRect(0, 0, 64, 64));
+        currentFrameY = 0;
     }
     else if (face == "left")
     {
-        sprite.setTextureRect(IntRect(66, 0, 64, 64));
+        currentFrameY = 2;
     }
     else if (face == "up")
     {
-        sprite.setTextureRect(IntRect(132, 0, 64, 64));
+        currentFrameY = 1;
     }
     else if (face == "down")
     {
-        sprite.setTextureRect(IntRect(198, 0, 64, 64));
+        currentFrameY = 3;
     }
-
 }
 
 

@@ -43,6 +43,7 @@ public:
     void setPosY(int);
     void setPosX(int);
     bool checkCollisionWithGhost(Ghost& ghost);
-
+    Clock animationClock;
+    float frameDelay;
 
 };
